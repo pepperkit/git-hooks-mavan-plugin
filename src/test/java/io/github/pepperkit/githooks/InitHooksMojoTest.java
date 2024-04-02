@@ -6,9 +6,7 @@
  */
 package io.github.pepperkit.githooks;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,6 +30,14 @@ class InitHooksMojoTest {
         gitHooksManagerMock = mock(GitHooksManager.class);
         initHooksMojo = new InitHooksMojo();
         initHooksMojo.gitHooksManager = gitHooksManagerMock;
+        when(gitHooksManagerMock.isGitRepository()).thenReturn(true);
+    }
+
+    @Test
+    void executesNothingIfNotAGitRepository() throws MojoExecutionException {
+        when(gitHooksManagerMock.isGitRepository()).thenReturn(false);
+        initHooksMojo.execute();
+        verify(gitHooksManagerMock, times(0)).getExistingHookFiles();
     }
 
     @Test

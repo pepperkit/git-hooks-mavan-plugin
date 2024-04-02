@@ -43,6 +43,12 @@ public class InitHooksMojo extends AbstractMojo {
 
     @Override
     public void execute() throws MojoExecutionException {
+        if (!gitHooksManager.isGitRepository()) {
+            getLog().info("No git repository found. " +
+                    "Plugin goals will only be executed from the root of the project.");
+            return;
+        }
+
         List<File> existingHookFiles = gitHooksManager.getExistingHookFiles();
         if (hooks == null) {
             existingHookFiles.forEach(File::delete);

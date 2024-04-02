@@ -91,16 +91,19 @@ public class GitHooksManager {
     }
 
     /**
+     * Determines if current working directory is the root directory of a git repository.
+     * @return true if it is a git repository, else false
+     */
+    public boolean isGitRepository() {
+      return Files.exists(GIT_PATH);
+    }
+
+    /**
      * Checks that git hooks directory exists, and creates it if it doesn't.
      * @throws IllegalStateException if git repository was not initialized
      *                               or there's an error on creating git hooks directory
      */
     void checkGitHooksDirAndCreateIfMissing() {
-        if (!Files.exists(GIT_PATH)) {
-            throw new IllegalStateException("It seems that it's not a git repository. " +
-                    "Plugin goals should be executed from the root of the project.");
-        }
-
         if (!Files.exists(GIT_HOOKS_PATH)) {
             try {
                 Files.createDirectories(GIT_HOOKS_PATH);
